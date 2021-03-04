@@ -2,6 +2,7 @@ const express = require('express') //เรียกใช้ express
 const app = express()
 app.use(express.json())
 const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID
 const url = 'mongodb+srv://SuperAdmin:d961d955*@cluster0.zgoyb.mongodb.net/book?retryWrites=true&w=majority'
 const client = new MongoClient(url, { useNewUrlParser: true ,useUnifiedTopology: true}); 
 
@@ -24,16 +25,15 @@ app.get('/books', async (req,res) => {
 app.get('/books/:id', (req,res) => {
     //input
     let id = req.params.id
-    let book = {}
-    //process
-    book = books[id]
+   
+    const movie = await booksCollection.findOne({ _id: ObjectID(id) })
     //output
     res.status(200).json(book)
 
 })
 
 
-app.post('/books',(req,res) => {
+app.post('/books',async (req,res) => {
     
     let title = req.body.titlebk
     let price  = req.body.pricebk
