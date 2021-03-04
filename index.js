@@ -10,7 +10,16 @@ app.get('/books',(req,res) => {
     res.status(200).json(books)
 
 })
+app.get('/books/:id', (req,res) => {
+    //input
+    let id = req.params.id
+    let book = {}
+    //process
+    book = books[id]
+    //output
+    res.status(200).json(book)
 
+})
 
 
 app.post('/books',(req,res) => {
@@ -22,7 +31,7 @@ app.post('/books',(req,res) => {
     let imageurl = req.body.imageurlbk
 
 
-    
+    let bookID = 0
    
     
      let newBook = {
@@ -37,9 +46,9 @@ app.post('/books',(req,res) => {
      
     
     books.push(newBook) 
-    
+    bookID = books.length - 1 
    
-  
+    res.status(201).json(bookID)
    
 })
 const port = 3000
