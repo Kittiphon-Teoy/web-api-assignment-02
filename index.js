@@ -1,10 +1,21 @@
 const express = require('express') //เรียกใช้ express
 const app = express()
-app.use(express.json()) 
+app.use(express.json())
+const MongoClient = require('mongodb').MongoClient;
+const url = 'mongodb+srv://SuperAdmin:d961d955*@cluster0.zgoyb.mongodb.net/book?retryWrites=true&w=majority'
+const client = new MongoClient(url, { useNewUrlParser: true ,useUnifiedTopology: true}); 
 
 let books = []
+let db,booksCollection
+//connect
+async function connect() {
+    await client.connect()
+     db=client.db('book')
+     booksCollection = db.collection('books')
+}
+connect()
 
-app.get('/books',(req,res) => {
+app.get('/books', async (req,res) => {
   
 
     res.status(200).json(books)
@@ -43,10 +54,10 @@ app.post('/books',(req,res) => {
      }
 
 
-     
+     const result = await booksCollection.insertOne(newBook)
     
-    books.push(newBook) 
-    bookID = books.length - 1 
+ 
+     bookID= result.insertedId
    
     res.status(201).json(bookID)
    
